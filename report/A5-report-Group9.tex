@@ -91,7 +91,7 @@ Section~\ref{sec:related} discusses related work. Sections~\ref{sec:data} and~\r
 
 \subsection{Offensive language detection}
 
-Offensive language detection became a standard NLP task through shared tasks such as OffensEval 2019, which introduced the OLID dataset \citep{zampieri2019olid}, and HASOC 2019 \citep{mandl2019hasoc}. Since then, fine-tuned transformers like BERT \citep{devlin2019bert} have dominated these tasks. Later work adapted BERT to abusive language before fine-tuning. HateBERT continues pre-training on banned Reddit communities \citep{caselli2021hatebert}, and fBERT on more than a million offensive tweets from SOLID \citep{sarkar2021fbert}. These are the three models combined in this report.
+Offensive language detection became a standard NLP task through shared tasks such as OffensEval 2019, which was based on the OLID dataset \citep{zampieri2019olid}, and HASOC 2019 \citep{mandl2019hasoc}. Since then, fine-tuned transformers like BERT \citep{devlin2019bert} have dominated these tasks. Later work adapted BERT to abusive language before fine-tuning. HateBERT continues pre-training on banned Reddit communities \citep{caselli2021hatebert}, and fBERT on more than a million offensive tweets from SOLID \citep{sarkar2021fbert}. These are the three models combined in this report.
 
 The weak spot of these models is generalisation. Models trained on one dataset often perform much worse on another, partly because datasets are collected and labelled in different ways \citep{fortuna2021how}. Studies on cross-domain hate speech detection found that models depend heavily on topic words and produce many false positives on new data \citep{markov2021improving}. Assignment 4 showed the same pattern for OLID and HASOC.
 
@@ -127,7 +127,7 @@ OLID test        & 860   & 620   & 240   & 27.9 & 24.4 \\
 \end{tabular}
 \end{table}
 
-The two training sets have the same size and label balance, so neither has an advantage in amount of data. They do differ in other ways. HASOC is about events from 2019, like the Cricket World Cup and a doctors' strike in India, while OLID is mostly about American politics in 2018. HASOC also keeps real user names and uses many more hashtags. Finally, 27.4 percent of the non-offensive HASOC posts contain a swear word, against only 2.8 percent in OLID, so the two datasets do not agree on how to label swearing.
+The two training sets have the same size and label balance, so neither has an advantage in amount of data. They do differ in other ways. OLID is mostly about American politics in 2018. HASOC is about events from 2019. Trump comes up in 38.5 percent of its posts. The Cricket World Cup and a doctors' strike in India are also big topics, at about 20 and 12 percent. HASOC also keeps real user names and uses many more hashtags. Finally, 27.4 percent of the non-offensive HASOC posts contain a swear word, against only 2.8 percent in OLID, so the two datasets do not agree on how to label swearing.
 
 % ------------------------------------------------------------------
 \section{Experimental setup}
@@ -168,7 +168,7 @@ The base models are BERT \citep{devlin2019bert}, HateBERT \citep{caselli2021hate
 
 Logistic Regression from Assignment 4 was left out. Its cross-domain macro-F1 of 0.51 was far below the transformers, so in a vote it would mostly add noise.
 
-During integration a problem became clear. The three ensembles were first built by different group members, and not all of them used the same base models. The hard voting block used the BERT predictions from Assignment 4, while the soft voting block retrained BERT to get probabilities. These two BERT runs disagree on 76 test tweets in-domain and on 132 cross-domain. Stacking also needed new models, since no out-of-fold predictions existed. To compare the ensemble strategies fairly, all three were finally computed on one shared set of base models, called the \textbf{matched pool}. This pool uses the uncased BERT base model, the HateBERT models from Assignment 4 and a new fBERT model. Every new model was trained with the same settings as HateBERT in Assignment 4, which are 3 epochs, a learning rate of 2e-5, weight decay of 0.01, an effective batch size of 16, a maximum length of 128 tokens and seed 42. The original results of each block are still reported in Section~\ref{sec:original}.
+During integration a problem became clear. The three ensembles were first built by different group members, and not all of them used the same base models. The hard voting block used the BERT predictions from Assignment 4, while the soft voting block retrained BERT to get probabilities. These were two separate training runs of BERT, and they disagree on 76 test tweets in-domain and on 132 cross-domain. Fine-tuning a transformer twice rarely gives the same model, since the random initialisation of the classification layer and the order of the training batches change the result. Stacking also needed new models, since no out-of-fold predictions existed. To compare the ensemble strategies fairly, all three were finally computed on one shared set of base models, called the \textbf{matched pool}. This pool uses the uncased BERT base model, the HateBERT models from Assignment 4 and a new fBERT model. Every new model was trained with the same settings as HateBERT in Assignment 4, which are 3 epochs, a learning rate of 2e-5, weight decay of 0.01, an effective batch size of 16, a maximum length of 128 tokens and seed 42. The original results of each block are still reported in Section~\ref{sec:original}.
 
 \subsection{Hard majority voting}
 
@@ -296,14 +296,14 @@ Soft voting, Assignment 4 models with retrained BERT & 0.8030 & 0.7813 \\
 \end{tabular}
 \end{table}
 
-With these base models, neither voting method beats fBERT. One detail looks strange but is correct. The in-domain hard voting result is exactly the same as HateBERT in Assignment 4, down to the confusion matrix. Hard voting disagrees with HateBERT on 38 tweets, but the gains and losses cancel out exactly. The difference with Table~\ref{tab:main} also shows how much the base models matter. The fBERT model from Assignment 4 was unusually strong cross-domain, and the seed check in Assignment 4 gave cross-domain scores between 0.804 and 0.811 for fBERT. The matched pool fBERT scores 0.797, which is within normal training variation.
+With these base models, neither voting method beats fBERT. One detail looks strange but is correct. The in-domain hard voting result is exactly the same as HateBERT in Assignment 4, down to the confusion matrix. Hard voting disagrees with HateBERT on 38 tweets, but the gains and losses cancel out exactly. The difference with Table~\ref{tab:main} also shows how much the base models matter. The fBERT model from Assignment 4 was unusually strong cross-domain, and the seed check in Assignment 4 gave cross-domain scores between 0.804 and 0.811 for fBERT. The matched pool fBERT scores 0.797. This is slightly below that range, but the gap is about the same size as the differences between seeds.
 
 % ------------------------------------------------------------------
 \section{Analysis}
 \label{sec:analysis}
 % ------------------------------------------------------------------
 
-The analysis focuses on stacking. It is the best system cross-domain, where the qualitative analysis takes place, and it has the smallest cross-domain drop of all ensembles. Soft voting is slightly better in-domain, but the two are not significantly different in either setting, with McNemar p-values of 0.71 in-domain and 0.39 cross-domain.
+The analysis focuses on stacking. It is the best system cross-domain, where the qualitative analysis takes place, and it has the smallest cross-domain drop of all ensembles. Soft voting is slightly better in-domain, but the two are not significantly different in either setting, as the last rows of Table~\ref{tab:mcnemar} show.
 
 \subsection{Improvement over the best single model}
 
@@ -311,28 +311,31 @@ Table~\ref{tab:mcnemar} compares each ensemble with fBERT, tweet by tweet.
 
 \begin{table}[H]
 \centering
-\caption{Exact McNemar tests of each ensemble against fBERT on the matched pool. The middle columns count the tweets that only one of the two systems gets right.}
+\caption{Exact McNemar tests on the matched pool. The middle columns count the tweets that only one of the two systems gets right. The last two rows compare the two best ensembles with each other.}
 \label{tab:mcnemar}
-\begin{tabular}{llrrr}
+\begin{tabular}{lllrrr}
 \toprule
-Setting & Ensemble & Only ensemble right & Only fBERT right & p-value \\
+Setting & System A & System B & Only A right & Only B right & p-value \\
 \midrule
-In-domain    & Hard voting & 10 & 12 & 0.832 \\
-In-domain    & Soft voting & 21 & 12 & 0.163 \\
-In-domain    & Stacking    & 6  & 0  & 0.031 \\
+In-domain    & Hard voting & fBERT & 10 & 12 & 0.832 \\
+In-domain    & Soft voting & fBERT & 21 & 12 & 0.163 \\
+In-domain    & Stacking    & fBERT & 6  & 0  & 0.031 \\
 \midrule
-Cross-domain & Hard voting & 21 & 28 & 0.392 \\
-Cross-domain & Soft voting & 24 & 21 & 0.766 \\
-Cross-domain & Stacking    & 23 & 16 & 0.337 \\
+Cross-domain & Hard voting & fBERT & 21 & 28 & 0.392 \\
+Cross-domain & Soft voting & fBERT & 24 & 21 & 0.766 \\
+Cross-domain & Stacking    & fBERT & 23 & 16 & 0.337 \\
+\midrule
+In-domain    & Stacking    & Soft voting & 13 & 16 & 0.711 \\
+Cross-domain & Stacking    & Soft voting & 8  & 4  & 0.388 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-In-domain, stacking improves on fBERT by 0.8 macro-F1 points. The gain is small but consistent. Stacking fixes 6 fBERT errors and does not introduce a single new one, so the improvement is significant with p = 0.03. Soft voting gains more on paper, 1.2 points, but it fixes 21 errors and breaks 12, which is not significant.
+In-domain, stacking improves on fBERT by 0.8 macro-F1 points. The gain is small but consistent. Stacking fixes 6 fBERT errors and does not introduce a single new one, so the improvement is significant with p = 0.03. This is only one of six comparisons with fBERT, though, and it would not survive a correction for multiple tests, so it is a modest result. Soft voting gains more on paper, 1.2 points, but it fixes 21 errors and breaks 12, which is not significant.
 
 Cross-domain, the picture is less clear. Stacking still wins by 0.5 points, but it changes more predictions, fixing 23 fBERT errors and creating 16 new ones. This is not significant. So the answer to the first question of the assignment is yes in-domain and only weakly cross-domain.
 
-The cross-domain drop is clearly smaller for the ensembles than for most single models. Stacking loses 1.65 macro-F1 points from in-domain to cross-domain, a relative drop of 2.0 percent. Soft and hard voting both lose about 2.4 points. BERT and HateBERT lose 5.6 and 4.8 points. Only fBERT, with a drop of 1.4 points, is as stable as stacking. As discussed in Assignment 4, this comes from its pre-training on SOLID, which uses the OLID labelling scheme.
+The cross-domain drop is clearly smaller for the ensembles than for most single models. Stacking loses about 1.6 macro-F1 points from in-domain to cross-domain, a relative drop of 2.0 percent. Soft and hard voting both lose about 2.4 points. BERT and HateBERT lose 5.6 and 4.8 points. fBERT is the most stable system of all, with a drop of only 1.4 points. As discussed in Assignment 4, this comes from its pre-training on SOLID, which uses the OLID labelling scheme.
 
 \subsection{Why the gains are small}
 
@@ -370,9 +373,9 @@ Cross-domain & HateBERT and fBERT & 0.772 & 0.631 & 0.519 & 0.858 \\
 \label{fig:pearson}
 \end{figure}
 
-The predictions are far from uncorrelated. The probabilities correlate between 0.76 and 0.89, and even the errors correlate between 0.52 and 0.72. The three models agree on the label of 744 tweets in-domain and 689 cross-domain, out of 860. In each setting there are 79 tweets on which all three are wrong, and no ensemble of these models can fix those.
+The predictions are far from uncorrelated. The probabilities correlate between 0.76 and 0.89, and even the errors correlate between 0.52 and 0.72. The three models agree on the label of 744 tweets in-domain and 689 cross-domain, out of 860. In each setting there are 79 tweets on which all three are wrong. It is a coincidence that the number is the same in both settings, the tweets themselves are not all the same. No ensemble of these models can fix them.
 
-This was expected. The models share the same fine-tuning data, and all three start from the same uncased BERT base weights and tokenizer. HateBERT and fBERT only differ from BERT in their extra pre-training. Following \citet{kuncheva2003measures}, low diversity means little room for an ensemble to improve. The correlations are lower cross-domain, so the models disagree more there. The ensembles do not turn this extra disagreement into a larger gain, though. Cross-domain, the models disagree on 171 tweets, and on these fBERT is right 67 percent of the time against 47 to 49 percent for BERT and HateBERT. In-domain the gap is much smaller, 56 percent against 48 to 50 percent. So cross-domain, following the majority is often the wrong choice, and only a method that learns to trust fBERT more can profit.
+This was expected. The models share the same fine-tuning data, and all three start from the same uncased BERT base weights and tokenizer. HateBERT and fBERT only differ from BERT in their extra pre-training. Following \citet{kuncheva2003measures}, low diversity means little room for an ensemble to improve. The correlations are lower cross-domain, so the models disagree more there. The ensembles do not turn this extra disagreement into a larger gain, though. Cross-domain, the models disagree on 171 tweets, and on these fBERT is right 67 percent of the time against 47 to 49 percent for BERT and HateBERT. In-domain the gap is much smaller, 56 percent against 48 to 50 percent. So cross-domain, following the majority is often the wrong choice. Stacking avoids this in two ways. It still gives fBERT the largest weight, almost half of the total, where voting gives every model a third. On top of that, it moves the decision boundary. Cross-domain, stacking predicts offensive less often than fBERT, which raises offensive precision from 0.75 to 0.79 and lowers recall from 0.65 to 0.63. Most of its cross-domain gain comes from this recalibration and not from a single model.
 
 \subsection{Quantitative error analysis}
 
@@ -450,7 +453,7 @@ FN & Swear word or slur missed & 5 & In just 8 short years the @USER have comple
 
 \subsubsection{False negatives}
 
-Most missed offensive tweets do not look offensive on the surface. The biggest real category is attacks on a whole group, with 24 cases. Almost all of these target a political group, like liberals, Democrats, antifa or conservatives, with claims such as Liberals always up to dirty tricks to get their way. A few target a religion or a country instead, like a tweet saying that Islam hates every non-Muslim. These tweets contain no swear words and use the same political vocabulary as many harmless OLID tweets. HASOC is also full of political posts about Trump, many of them labelled non-offensive, so a model trained on it learns that strong political statements are normal.
+Most missed offensive tweets do not look offensive on the surface. The biggest real category is attacks on a whole group, with 24 cases. Almost all of these target a political group, like liberals, Democrats, antifa or conservatives, with claims such as Liberals always up to dirty tricks to get their way. A few target a religion or a country instead, like a tweet saying that Islam hates every non-Muslim. These tweets contain no swear words and use the same political vocabulary as many harmless OLID tweets. HASOC is also very political, with Trump mentioned in 38.5 percent of its posts, and many of these posts are labelled non-offensive. A model trained on it learns that strong political statements are normal.
 
 Implicit insults and sarcasm come next, with 12 cases each. Calling someone so full of herself or nothing more than a racebaiter is clearly insulting, but needs no explicit word. Sarcastic tweets, like Who can possibly stand to watch so many liberals in one place at one time, or the remark that a real leader falls into a van like a sack of potatoes, are even harder, because their literal meaning is not offensive. Comparisons work the same way, as in Conservatives just like old garbage bags blowing in the wind.
 
@@ -474,7 +477,11 @@ Each type of error calls for a different fix.
 
 \textbf{Offence in hashtags.} Hashtags can be split into words before tokenization, so DespicableDems becomes despicable dems. This is cheap and only changes the input.
 
-\textbf{False positives from swear words and identity terms.} A swear word count could be added as a stacking feature, so the meta-model can learn when swearing matters and when it does not. For identity and violence terms, the training data can be extended with neutral sentences that mention these terms, so the model stops treating them as offensive on their own.
+\textbf{Strong opinions and quotations.} Most of these false positives criticise a politician or a policy without insulting a person. A target detector, again based on the third level of OLID, would help here, since a tweet without a personal or group target is rarely offensive. For quotations, the training data could include harmless tweets that quote or report offensive words, so the model learns that a word in quotation marks is not the same as an insult.
+
+\textbf{Swear words, missed or misused.} A swear word count could be added as a stacking feature. This helps in both directions. The meta-model can learn to flag the 5 missed tweets that do contain a swear word, and it can also learn when swearing is harmless.
+
+\textbf{Identity and violence terms.} The training data can be extended with neutral sentences that mention these terms, so the model stops treating them as offensive on their own.
 
 \textbf{Doubtful labels.} These can only be fixed in the data, by relabelling unclear cases or by using labels from several annotators instead of one.
 
@@ -485,7 +492,7 @@ Each type of error calls for a different fix.
 
 \subsection{Summary of findings}
 
-Combining the three BERT models helps, but only a little. On a shared set of base models, soft voting and stacking both beat the best single model, by 1.2 and 0.8 macro-F1 points in-domain and by 0.2 and 0.5 points cross-domain. Only the in-domain gain of stacking is significant. Hard voting does not beat fBERT in either setting. Stacking keeps the cross-domain drop small, at 1.65 points, compared with about 5 points for BERT and HateBERT. The hypothesis is therefore confirmed. The gains are small because the base models are highly correlated, with error correlations between 0.52 and 0.72, and because all three are wrong on the same 79 tweets.
+Combining the three BERT models helps, but only a little. On a shared set of base models, soft voting and stacking both beat the best single model, by 1.2 and 0.8 macro-F1 points in-domain and by 0.2 and 0.5 points cross-domain. Only the in-domain gain of stacking is significant. Hard voting does not beat fBERT in either setting. Stacking keeps the cross-domain drop small, at about 1.6 points, compared with about 5 points for BERT and HateBERT. The hypothesis is therefore only partly confirmed. The gain holds in-domain for stacking but is weak cross-domain. It also depends on the base model run, since the fBERT model from Assignment 4 beats every ensemble cross-domain. The gains are small because the base models are highly correlated, with error correlations between 0.52 and 0.72, and because in each setting there are 79 tweets that all three get wrong.
 
 The error analysis shows that the main remaining challenge is offence without explicit words. Cross-domain, stacking misses 55 percent of the offensive tweets without a swear word. Most of these are attacks on political groups, and many others are implicit insults or sarcastic remarks. About a quarter of all errors involve gold labels that are hard to defend.
 
