@@ -1,0 +1,85 @@
+{
+  "k": 3,
+  "seed": 42,
+  "cv": "StratifiedGroupKFold; identical texts stay together",
+  "models": {
+    "bert": [
+      "google-bert/bert-base-uncased",
+      "86b5e0934494bd15c9632b12f734a8a67f723594"
+    ],
+    "hatebert": [
+      "GroNLP/hateBERT",
+      "ab7a2d40f6c973cb57e63f23bfa2b51d981d028c"
+    ],
+    "fbert": [
+      "diptanu/fBERT",
+      "c089daa35cb177238dd91ffe3010c2d8bbd069bf"
+    ]
+  },
+  "base_parameters": {
+    "num_train_epochs": 3,
+    "learning_rate": 2e-05,
+    "train_batch_size": 8,
+    "gradient_accumulation_steps": 2,
+    "eval_batch_size": 32,
+    "max_seq_length": 128,
+    "optimizer": "AdamW",
+    "scheduler": "linear_schedule_with_warmup",
+    "warmup_ratio": 0.06,
+    "warmup_steps": 0,
+    "weight_decay": 0.01,
+    "adam_epsilon": 1e-08,
+    "max_grad_norm": 1.0,
+    "manual_seed": 42,
+    "fp16": true,
+    "do_lower_case": true,
+    "use_early_stopping": false,
+    "evaluate_during_training": false,
+    "save_model_every_epoch": false,
+    "save_eval_checkpoints": false,
+    "save_steps": -1,
+    "save_optimizer_and_scheduler": false,
+    "overwrite_output_dir": false,
+    "reprocess_input_data": true,
+    "no_cache": true,
+    "use_multiprocessing": false,
+    "use_multiprocessing_for_evaluation": false,
+    "dataloader_num_workers": 0,
+    "thread_count": 4,
+    "process_count": 1,
+    "n_gpu": 1,
+    "logging_steps": 50,
+    "silent": false,
+    "wandb_project": null
+  },
+  "probability_features": [
+    "bert_prob",
+    "hatebert_prob",
+    "fbert_prob"
+  ],
+  "extra_features": [
+    "log_characters",
+    "log_words",
+    "uppercase_fraction",
+    "exclamation_count",
+    "question_count",
+    "hashtag_count"
+  ],
+  "meta_model": "StandardScaler + LogisticRegression",
+  "meta_parameters": {
+    "C": 1.0,
+    "max_iter": 2000,
+    "class_weight": null,
+    "solver": "lbfgs",
+    "random_state": 42
+  },
+  "selection": "Prespecified; final epoch; no test-based selection",
+  "test_usage": "Predict only, then evaluate once all training outputs are fixed",
+  "data_sha256": {
+    "olid-train-small.csv": "d8b0097defcc1a31f611fe07af7ef81f5e730e424507eb0994ebb6b92220aadd",
+    "hasoc-train.csv": "780744468ef09fbd1be66bb87a12bfe581690662b4555b8238894ac0b2f65299",
+    "olid-test.csv": "45259b2be5bd7cabd0c30375dd736898faf82ec47a489f3f2a54badf53c4227d"
+  },
+  "primary_test_pool": "Matched full-training recipe; reused A4 HateBERT, newly trained BERT/fBERT",
+  "diagnostics": "Probability-only stacking ablation; shared-pool sensitivity evaluated separately, never used for selection"
+}

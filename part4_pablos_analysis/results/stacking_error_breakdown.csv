@@ -1,0 +1,11 @@
+setting,group,n,error_rate
+In-domain,0-15 words,275,0.14181818181818182
+In-domain,16-30 words,305,0.1377049180327869
+In-domain,31+ words,280,0.15357142857142858
+In-domain,"offensive, with swear word",88,0.0
+In-domain,"offensive, without swear word",152,0.4473684210526316
+Cross-domain,0-15 words,275,0.12363636363636364
+Cross-domain,16-30 words,305,0.16393442622950818
+Cross-domain,31+ words,280,0.15714285714285714
+Cross-domain,"offensive, with swear word",88,0.056818181818181816
+Cross-domain,"offensive, without swear word",152,0.5526315789473685

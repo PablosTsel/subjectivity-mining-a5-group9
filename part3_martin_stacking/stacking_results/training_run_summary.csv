@@ -1,0 +1,25 @@
+model,setting,fold,origin,training_rows,prediction_rows,seconds_A5_training
+bert,in_domain,0,A5 trained,3899,1953,118.12532230000943
+bert,in_domain,1,A5 trained,3904,1948,111.88660239998717
+bert,in_domain,2,A5 trained,3901,1951,113.00707089994103
+bert,in_domain,full,A5 trained,5852,860,175.2233548000222
+hatebert,in_domain,0,A5 trained,3899,1953,113.9716796000721
+hatebert,in_domain,1,A5 trained,3904,1948,123.78991730010603
+hatebert,in_domain,2,A5 trained,3901,1951,123.58547759999055
+hatebert,in_domain,full,A4 full checkpoint reused,5852,860,0.0
+fbert,in_domain,0,A5 trained,3899,1953,114.93322640005499
+fbert,in_domain,1,A5 trained,3904,1948,112.4093124999199
+fbert,in_domain,2,A5 trained,3901,1951,113.1314167000819
+fbert,in_domain,full,A5 trained,5852,860,166.8264601000119
+bert,cross_domain,0,A5 trained,3908,1944,110.01268799998797
+bert,cross_domain,1,A5 trained,3903,1949,108.31239320000168
+bert,cross_domain,2,A5 trained,3893,1959,109.11035500001162
+bert,cross_domain,full,A5 trained,5852,860,160.51920310000423
+hatebert,cross_domain,0,A5 trained,3908,1944,107.99929639999755
+hatebert,cross_domain,1,A5 trained,3903,1949,107.777585899923
+hatebert,cross_domain,2,A5 trained,3893,1959,110.59620929998346
+hatebert,cross_domain,full,A4 full checkpoint reused,5852,860,0.0
+fbert,cross_domain,0,A5 trained,3908,1944,110.08926849998534
+fbert,cross_domain,1,A5 trained,3903,1949,107.98915749997832
+fbert,cross_domain,2,A5 trained,3893,1959,108.23655999999028
+fbert,cross_domain,full,A5 trained,5852,860,161.31609520001803

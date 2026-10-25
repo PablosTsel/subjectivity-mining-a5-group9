@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "oof_checks": [
+    {
+      "setting": "in_domain",
+      "oof_rows": 5852,
+      "n_folds": 3,
+      "all_rows_predicted_once_per_model": true,
+      "train_heldout_ids_disjoint": true,
+      "duplicate_texts_kept_together": true,
+      "test_rows_unchanged": true,
+      "probabilities_finite": true
+    },
+    {
+      "setting": "cross_domain",
+      "oof_rows": 5852,
+      "n_folds": 3,
+      "all_rows_predicted_once_per_model": true,
+      "train_heldout_ids_disjoint": true,
+      "duplicate_texts_kept_together": true,
+      "test_rows_unchanged": true,
+      "probabilities_finite": true
+    }
+  ],
+  "provided_metrics_recomputed": true,
+  "meta_model_reload_predictions_identical": true,
+  "test_labels_never_used_for_meta_fit": true,
+  "no_test_based_selection": true,
+  "prediction_rows_per_setting": 860
+}

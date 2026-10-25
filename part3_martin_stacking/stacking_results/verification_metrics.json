@@ -1,0 +1,78 @@
+{
+  "status": "passed",
+  "oof_provenance": [
+    {
+      "setting": "in_domain",
+      "oof_rows": 5852,
+      "n_folds": 3,
+      "all_rows_predicted_once_per_model": true,
+      "train_heldout_ids_disjoint": true,
+      "duplicate_texts_kept_together": true,
+      "test_rows_unchanged": true,
+      "probabilities_finite": true
+    },
+    {
+      "setting": "cross_domain",
+      "oof_rows": 5852,
+      "n_folds": 3,
+      "all_rows_predicted_once_per_model": true,
+      "train_heldout_ids_disjoint": true,
+      "duplicate_texts_kept_together": true,
+      "test_rows_unchanged": true,
+      "probabilities_finite": true
+    }
+  ],
+  "metric_checks": [
+    {
+      "setting": "in_domain",
+      "method": "stacking",
+      "all_metrics_match": true,
+      "rows": 860
+    },
+    {
+      "setting": "in_domain",
+      "method": "stacking_probabilities_only",
+      "all_metrics_match": true,
+      "rows": 860
+    },
+    {
+      "setting": "in_domain",
+      "method": "hard_voting_matched",
+      "all_metrics_match": true,
+      "rows": 860
+    },
+    {
+      "setting": "in_domain",
+      "method": "soft_voting_matched",
+      "all_metrics_match": true,
+      "rows": 860
+    },
+    {
+      "setting": "cross_domain",
+      "method": "stacking",
+      "all_metrics_match": true,
+      "rows": 860
+    },
+    {
+      "setting": "cross_domain",
+      "method": "stacking_probabilities_only",
+      "all_metrics_match": true,
+      "rows": 860
+    },
+    {
+      "setting": "cross_domain",
+      "method": "hard_voting_matched",
+      "all_metrics_match": true,
+      "rows": 860
+    },
+    {
+      "setting": "cross_domain",
+      "method": "soft_voting_matched",
+      "all_metrics_match": true,
+      "rows": 860
+    }
+  ],
+  "portable_meta_equations_verified": true,
+  "base_checkpoint_reload_checks": [],
+  "base_reload_performed": false
+}

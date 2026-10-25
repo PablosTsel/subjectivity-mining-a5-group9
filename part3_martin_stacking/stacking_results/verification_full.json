@@ -1,0 +1,121 @@
+{
+  "status": "passed",
+  "oof_provenance": [
+    {
+      "setting": "in_domain",
+      "oof_rows": 5852,
+      "n_folds": 3,
+      "all_rows_predicted_once_per_model": true,
+      "train_heldout_ids_disjoint": true,
+      "duplicate_texts_kept_together": true,
+      "test_rows_unchanged": true,
+      "probabilities_finite": true
+    },
+    {
+      "setting": "cross_domain",
+      "oof_rows": 5852,
+      "n_folds": 3,
+      "all_rows_predicted_once_per_model": true,
+      "train_heldout_ids_disjoint": true,
+      "duplicate_texts_kept_together": true,
+      "test_rows_unchanged": true,
+      "probabilities_finite": true
+    }
+  ],
+  "metric_checks": [
+    {
+      "setting": "in_domain",
+      "method": "stacking",
+      "all_metrics_match": true,
+      "rows": 860
+    },
+    {
+      "setting": "in_domain",
+      "method": "stacking_probabilities_only",
+      "all_metrics_match": true,
+      "rows": 860
+    },
+    {
+      "setting": "in_domain",
+      "method": "hard_voting_matched",
+      "all_metrics_match": true,
+      "rows": 860
+    },
+    {
+      "setting": "in_domain",
+      "method": "soft_voting_matched",
+      "all_metrics_match": true,
+      "rows": 860
+    },
+    {
+      "setting": "cross_domain",
+      "method": "stacking",
+      "all_metrics_match": true,
+      "rows": 860
+    },
+    {
+      "setting": "cross_domain",
+      "method": "stacking_probabilities_only",
+      "all_metrics_match": true,
+      "rows": 860
+    },
+    {
+      "setting": "cross_domain",
+      "method": "hard_voting_matched",
+      "all_metrics_match": true,
+      "rows": 860
+    },
+    {
+      "setting": "cross_domain",
+      "method": "soft_voting_matched",
+      "all_metrics_match": true,
+      "rows": 860
+    }
+  ],
+  "portable_meta_equations_verified": true,
+  "base_checkpoint_reload_checks": [
+    {
+      "model": "bert",
+      "setting": "in_domain",
+      "all_predictions_match": true,
+      "probabilities_match": true,
+      "max_logit_difference": 7.45931094670027e-17
+    },
+    {
+      "model": "hatebert",
+      "setting": "in_domain",
+      "all_predictions_match": true,
+      "probabilities_match": true,
+      "max_logit_difference": 6.245004513516506e-17
+    },
+    {
+      "model": "fbert",
+      "setting": "in_domain",
+      "all_predictions_match": true,
+      "probabilities_match": true,
+      "max_logit_difference": 5.0306980803327406e-17
+    },
+    {
+      "model": "bert",
+      "setting": "cross_domain",
+      "all_predictions_match": true,
+      "probabilities_match": true,
+      "max_logit_difference": 7.502679033599691e-17
+    },
+    {
+      "model": "hatebert",
+      "setting": "cross_domain",
+      "all_predictions_match": true,
+      "probabilities_match": true,
+      "max_logit_difference": 8.760353553682876e-17
+    },
+    {
+      "model": "fbert",
+      "setting": "cross_domain",
+      "all_predictions_match": true,
+      "probabilities_match": true,
+      "max_logit_difference": 7.502679033599691e-17
+    }
+  ],
+  "base_reload_performed": true
+}

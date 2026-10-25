@@ -1,0 +1,3 @@
+dataset,rows,class_0,class_1,duplicate_text_rows,matching_test_texts
+olid-train-small.csv,5852,3591,2261,8,3
+hasoc-train.csv,5852,3591,2261,78,0

@@ -1,0 +1,7 @@
+setting,length_group,n,offensive_support,errors,error_rate
+In-domain,0-15 words,275,89,39,0.14181818181818182
+In-domain,16-30 words,305,86,42,0.1377049180327869
+In-domain,31+ words,280,65,43,0.15357142857142858
+Cross-domain,0-15 words,275,89,34,0.12363636363636364
+Cross-domain,16-30 words,305,86,50,0.16393442622950818
+Cross-domain,31+ words,280,65,44,0.15714285714285714

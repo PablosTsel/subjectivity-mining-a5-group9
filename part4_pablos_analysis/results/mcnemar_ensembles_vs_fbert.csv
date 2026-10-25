@@ -1,0 +1,9 @@
+setting,system_a,system_b,only_a_correct,only_b_correct,mcnemar_exact_p
+In-domain,Stacking,fBERT,6,0,0.03125
+In-domain,Soft voting,fBERT,21,12,0.16275565745308995
+In-domain,Hard voting,fBERT,10,12,0.8318119049072266
+In-domain,Stacking,Soft voting,13,16,0.711071103811264
+Cross-domain,Stacking,fBERT,23,16,0.3367836351899315
+Cross-domain,Soft voting,fBERT,24,21,0.765991824244793
+Cross-domain,Hard voting,fBERT,21,28,0.3916029105474905
+Cross-domain,Stacking,Soft voting,8,4,0.3876953125

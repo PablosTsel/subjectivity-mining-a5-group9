@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "original_files_checked": 22,
+  "all_provided_files_byte_identical": true,
+  "fold_trainings": 18,
+  "new_full_trainings": 4,
+  "reused_A4_full_checkpoints": 2,
+  "total_A5_recorded_training_seconds": 2688.8486527000787
+}

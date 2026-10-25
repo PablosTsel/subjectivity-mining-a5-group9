@@ -1,0 +1,38 @@
+{
+  "features": [
+    "bert_prob",
+    "hatebert_prob",
+    "fbert_prob"
+  ],
+  "coef": [
+    0.3226079950237426,
+    0.1862405461756234,
+    0.4854454887512619
+  ],
+  "intercept": -0.5259155887842839,
+  "scaler_mean": [
+    0.3899767419754832,
+    0.39170023455179104,
+    0.39097411729186193
+  ],
+  "scaler_scale": [
+    0.32043457087466987,
+    0.3103401285684347,
+    0.31018182209228773
+  ],
+  "classes": [
+    0,
+    1
+  ],
+  "training_rows": 5852,
+  "fit_data": "OOF training features, never test labels",
+  "parameters": {
+    "C": 1.0,
+    "solver": "lbfgs",
+    "max_iter": 2000,
+    "class_weight": null,
+    "seed": 42
+  },
+  "oof_sha256": "5b03f1cef921dc5df9739124c9fe00a20685e1ca6e9dfd543e55e064f76bee57",
+  "meta_model_sha256": "64725c2fe5548faf8af24e2024e7a7e8e64b653710868e132cea1f1296f4d5cc"
+}
