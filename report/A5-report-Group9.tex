@@ -72,7 +72,7 @@
 \section{Introduction}
 % ------------------------------------------------------------------
 
-Social media platforms receive far more posts than human moderators can read, so automatic systems are used to flag offensive content. These systems need to work well on new data, and that is where they often fail. A classifier trained on one dataset can lose a lot of performance on posts from another platform or annotation project \citep{swamy2019studying,fortuna2021how}. For researchers in offensive language detection this is a practical problem as much as a scientific one. Every new platform or topic can bring a new kind of domain shift.
+Social media platforms receive far more posts than human moderators can read, so automatic systems are used to flag offensive content. These systems need to work well on new data, and that is where they often fail. A classifier trained on one dataset can lose a lot of performance on posts from another platform or annotation project \citep{fortuna2021how}. For researchers in offensive language detection this is a practical problem as much as a scientific one. Every new platform or topic can bring a new kind of domain shift.
 
 In Assignment 4, three transformer models were fine-tuned on OLID and on HASOC and tested on the OLID test set. The models made different mistakes, and fBERT turned out to be the most stable model across domains. This raises an obvious idea. If the models make partly different mistakes, combining them could fix some of those mistakes.
 
@@ -91,15 +91,15 @@ Section~\ref{sec:related} discusses related work. Sections~\ref{sec:data} and~\r
 
 \subsection{Offensive language detection}
 
-Offensive language detection became a standard NLP task through shared tasks such as OffensEval 2019, which introduced the OLID dataset \citep{zampieri2019olid,zampieri2019semeval}, and HASOC 2019 \citep{mandl2019hasoc}. Since then, fine-tuned transformers have dominated. The best system for OffensEval 2019 Subtask A was a fine-tuned BERT model \citep{liu2019nuli}. Later work adapted BERT to abusive language before fine-tuning. HateBERT continues pre-training on banned Reddit communities \citep{caselli2021hatebert}, and fBERT on more than a million offensive tweets from SOLID \citep{sarkar2021fbert,rosenthal2021solid}. These are the three models combined in this report.
+Offensive language detection became a standard NLP task through shared tasks such as OffensEval 2019, which introduced the OLID dataset \citep{zampieri2019olid}, and HASOC 2019 \citep{mandl2019hasoc}. Since then, fine-tuned transformers like BERT \citep{devlin2019bert} have dominated these tasks. Later work adapted BERT to abusive language before fine-tuning. HateBERT continues pre-training on banned Reddit communities \citep{caselli2021hatebert}, and fBERT on more than a million offensive tweets from SOLID \citep{sarkar2021fbert}. These are the three models combined in this report.
 
-The weak spot of these models is generalisation. Models trained on one dataset often perform much worse on another \citep{swamy2019studying,fortuna2021how}, partly because datasets are collected and labelled in different ways \citep{wiegand2019detection}. Studies on cross-domain hate speech detection found that models depend heavily on topic words and produce many false positives on new data \citep{markov2021exploring,markov2021improving}. Assignment 4 showed the same pattern for OLID and HASOC.
+The weak spot of these models is generalisation. Models trained on one dataset often perform much worse on another, partly because datasets are collected and labelled in different ways \citep{fortuna2021how}. Studies on cross-domain hate speech detection found that models depend heavily on topic words and produce many false positives on new data \citep{markov2021improving}. Assignment 4 showed the same pattern for OLID and HASOC.
 
 \subsection{Ensemble methods}
 
-Ensembles combine several classifiers in the hope that their errors cancel out. \citet{dietterich2000ensemble} explains why this works. An ensemble only helps if its members are accurate and also make different errors, a property usually called diversity \citep{kuncheva2003measures}. Majority voting is the simplest combination rule. Stacking, introduced by \citet{wolpert1992stacked}, instead trains a meta-model on the predictions of the base models. To avoid overfitting, these training predictions must come from models that did not see the same examples, which is why stacking uses k-fold cross-validation.
+Ensembles combine several classifiers in the hope that their errors cancel out. An ensemble only helps if its members are accurate and also make different errors, a property usually called diversity \citep{kuncheva2003measures}. Majority voting is the simplest combination rule. Stacking, introduced by \citet{wolpert1992stacked}, instead trains a meta-model on the predictions of the base models. To avoid overfitting, these training predictions must come from models that did not see the same examples, which is why stacking uses k-fold cross-validation.
 
-Ensembles are common in offensive language shared tasks. Many of the top teams in OffensEval 2020 combined several transformer models \citep{zampieri2020semeval}, and \citet{risch2020bagging} showed that an ensemble of BERT models trained on different subsets of the data is more stable than a single model. The most direct inspiration for this report is \citet{vanaken2018challenges}. They built an ensemble of neural and classical models for toxic comment classification, which outperformed every single model, and then carried out a detailed error analysis. Their error categories, such as toxicity without swear words, sarcasm, rhetorical questions and doubtful labels, are used as the starting point for the qualitative analysis here.
+Ensembles are common in offensive language shared tasks. Many of the top teams in OffensEval 2020 combined several transformer models \citep{zampieri2020semeval}, often several fine-tuned versions of BERT. The most direct inspiration for this report is \citet{vanaken2018challenges}. They built an ensemble of neural and classical models for toxic comment classification, which outperformed every single model, and then carried out a detailed error analysis. Their error categories, such as toxicity without swear words, sarcasm, rhetorical questions and doubtful labels, are used as the starting point for the qualitative analysis here.
 
 \subsection{How this work differs}
 
@@ -136,7 +136,7 @@ The two training sets have the same size and label balance, so neither has an ad
 
 The setup is also the same as in Assignment 4. In the \textbf{in-domain} setting, the models are trained on OLID train small and tested on the OLID test set. In the \textbf{cross-domain} setting, they are trained on HASOC and tested on the same OLID test set. The test set never changes, so any difference between the settings comes from the training data.
 
-All systems are evaluated with the shared evaluation function from Assignment 4. It reports accuracy, macro-averaged precision, recall and F1, the same scores per class, and the confusion matrix. Macro-F1 is the main metric because only 28 percent of the test tweets are offensive. Differences between two systems on the same test tweets are tested with an exact McNemar test \citep{mcnemar1947note}. No system uses the test set for training or tuning.
+All systems are evaluated with the shared evaluation function from Assignment 4. It reports accuracy, macro-averaged precision, recall and F1, the same scores per class, and the confusion matrix. Macro-F1 is the main metric because only 28 percent of the test tweets are offensive. Differences between two systems on the same test tweets are tested with an exact McNemar test. No system uses the test set for training or tuning.
 
 % ------------------------------------------------------------------
 \section{Methods}
@@ -164,7 +164,7 @@ Stacking & Out-of-fold probabilities on the training set, plus test probabilitie
 
 \subsection{Base models}
 
-The base models are BERT \citep{devlin2019bert}, HateBERT \citep{caselli2021hatebert} and fBERT \citep{sarkar2021fbert}. All three are BERT base models with 12 layers. HateBERT was pre-trained further on Reddit posts from communities banned for abuse, and fBERT on offensive tweets from SOLID, a large dataset built with the OLID labelling scheme. Each model is fine-tuned for binary classification with the Simple Transformers library \citep{rajapakse2019simpletransformers}. The offensive probability is the softmax of the two output scores.
+The base models are BERT \citep{devlin2019bert}, HateBERT \citep{caselli2021hatebert} and fBERT \citep{sarkar2021fbert}. All three are BERT base models with 12 layers. HateBERT was pre-trained further on Reddit posts from communities banned for abuse, and fBERT on offensive tweets from SOLID, a large dataset built with the OLID labelling scheme. Each model is fine-tuned for binary classification with the Simple Transformers library. The offensive probability is the softmax of the two output scores.
 
 Logistic Regression from Assignment 4 was left out. Its cross-domain macro-F1 of 0.51 was far below the transformers, so in a vote it would mostly add noise.
 
@@ -190,7 +190,7 @@ Stacking learns how to combine the base models \citep{wolpert1992stacked}. The m
 
 The meta-model gets nine features per tweet. Three are the base model probabilities. The other six are simple text features. These are the log of the number of characters and of the number of words, the share of capital letters, and the number of exclamation marks and of question marks. The last one is the number of hashtags. These features were added because the assignment asks for extra features and because Assignment 4 showed that length and hashtags differ between the datasets.
 
-The meta-model is a Logistic Regression from scikit-learn \citep{pedregosa2011scikit}, with standardised features, L2 regularisation with C = 1 and no class weights. A separate meta-model is trained for each setting, on the 5,852 out-of-fold training rows. At test time, base models trained on the full training set produce the three probabilities. The decision threshold stays at 0.5. As a check, a second stacking model with only the three probabilities was also trained.
+The meta-model is a Logistic Regression from scikit-learn, with standardised features, L2 regularisation with C = 1 and no class weights. A separate meta-model is trained for each setting, on the 5,852 out-of-fold training rows. At test time, base models trained on the full training set produce the three probabilities. The decision threshold stays at 0.5. As a check, a second stacking model with only the three probabilities was also trained.
 
 \subsection{Analysis methods}
 
